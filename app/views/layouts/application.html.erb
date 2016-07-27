@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>devlunchbox</title>
+  <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
+  <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
+  <%= csrf_meta_tags %>
+  <link href='https://fonts.googleapis.com/css?family=Quicksand:700' rel='stylesheet' type='text/css'>
+  <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.12.2.min.js"></script>
+</head>
+<body>
+
+<%= yield %>
+
+<script src="https://maps.googleapis.com/maps/api/js?callback=initMap&key=<%= ENV['GOOGLE_MAPS_API_KEY'] %>" async defer></script>
+
+</body>
+</html>
