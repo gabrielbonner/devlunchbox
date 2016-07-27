@@ -1,6 +1,7 @@
 class LunchboxesController < ApplicationController
   def index
     @markers = Marker.all
+    return @markers.to_json
   end
 
   def create
