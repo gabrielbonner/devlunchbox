@@ -1,0 +1,89 @@
+.container {
+  margin: 20px auto;
+  width: 600px;
+  padding: 0px 20px 20px 20px;
+  border: 1px dotted black;
+}
+
+th {
+  text-align: left;
+}
+
+#map {
+  width:60%;
+  height:500px;
+  margin:auto;
+  border:solid#828C91 3px;
+}
+
+#legend{
+  background:white;
+  padding:10px;
+}
+
+.info-box-div {
+  border:solid#828C91 3px;
+  margin:30px;
+  padding:10px;
+  background-color:white;
+}
+
+#add-new-lunchbox-div {
+  display:none;
+  width:60%;
+  margin:20px auto 20px auto;
+}
+
+input {
+  margin-left:20px;
+  width:50%;
+  height:20px;
+}
+
+label {
+  color:black;
+}
+
+html {
+  background:linear-gradient(to bottom right,#828C91,#19ABB5);
+  min-height:100%;
+}
+
+h1 {
+  text-align:center;
+}
+
+* {
+  font-family:'Quicksand',sans-serif;
+}
+
+#dev {
+  font-size:2em;
+  color:#19ABB5;
+}
+
+#lunchbox {
+  font-size:2em;
+  color:#828C91;
+}
+
+#title {width:60%;
+  margin:20px auto 20px auto;
+}
+
+#title h1 {
+  margin:0px
+}
+
+#instructions {
+  width:60%;
+  margin:20px auto 20px auto;
+}
+
+a {
+  text-decoration:none;
+}
+
+body {
+  min-height:100%
+}
