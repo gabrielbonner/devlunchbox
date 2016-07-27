@@ -1,5 +1,5 @@
 //constructor function to save new markers
-      var LunchboxMarker = function(params){this.name = params['name'];
+      var Marker = function(params){this.name = params['name'];
                                             this.description = params['description'];
                                             this.tags = params['tags'];
                                             this.latitude = params['latitude'];
@@ -15,11 +15,11 @@
         });
         // 'school' icon placed on DBC
         var marker = new google.maps.Marker({
-        position: {lat: 32.7155500, lng: -117.158000},
-        map: map,
-        icon: 'https://i.imgur.com/ltTnna4.png',
-        // dbc logo colors are cyan = #19ABB5 , grey = #828C91
-        title: 'DBC'
+          position: {lat: 32.7155500, lng: -117.158000},
+          map: map,
+          icon: 'https://i.imgur.com/ltTnna4.png',
+          // dbc logo colors are cyan = #19ABB5 , grey = #828C91
+          title: 'DBC'
         });
         map.setOptions({styles: styles});
         google.maps.event.addListener(map, 'rightclick', function( event ){
@@ -33,34 +33,28 @@
             var name = $(this).closest('form').find('input[name=name]').val();
             var description = $(this).closest('form').find('input[name=description]').val();
             var tags = $(this).closest('form').find('input[name=tags]').val().split(', ');
-
             // var infowindow = new google.maps.InfoWindow({"<h3>"+name+"</h3>" +
             //                                              "<p>Description: "+description+"</p>" +
             //                                              "<p>Tags: "+tags+"</p>"
             //                                             });
-
-            lunchbox_marker = new LunchboxMarker({name: name,
+            lunchbox_marker = new Marker({name: name,
                                                 description: description,
                                                 tags: tags,
                                                 latitude: latitude,
                                                 longitude: longitude})
-            console.log("MARKER BEING SENT TO SERVER:")
             console.log(lunchbox_marker)  // it's aliiiiiive!
 
             $.ajax({
-              method: 'POST',
+              method: 'post',
               dataType: 'json',
-              url: '/',
+              url: '/lunchboxes',
               data: lunchbox_marker
             })
               .done(function(response){
                 alert("Your marker was saved to the map");
-
-
               })
               .fail(function(response){
-                console.log(response)
-
+                console.log('Server\'s response was ===> ' + response)
               });
 
             // TODO:

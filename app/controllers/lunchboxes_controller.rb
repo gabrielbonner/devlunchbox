@@ -4,12 +4,13 @@ class LunchboxesController < ApplicationController
   end
 
   def create
-    marker = LunchboxMarker.new(
+    marker = Marker.new(
       name: params[:name],
       description: params[:description],
       tags: params[:tags],
       latitude: params[:latitude],
-      longitude: params[:longitude]
+      longitude: params[:longitude],
+      infowindow: params[:infowindow]
       )
     if marker.save
       status 200
