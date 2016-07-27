@@ -25,6 +25,16 @@ function initMap() {
     title: 'DBC'
   });
 
+  // add markers from database
+  var test_marker = ['Miguel\'s', 32.716537, -117.158398]
+  var db_markers = [test_marker]
+  for (i=0; i<db_markers.length; i++) {
+    marker = new google.maps.Marker({
+      position: {lat: db_markers[i][1], lng: db_markers[i][2]},
+      map: map
+    });
+  }
+
   map.setOptions({styles: styles});
 
   // displaying form to capture marker info from user
