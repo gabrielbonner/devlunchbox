@@ -4,7 +4,20 @@ var Marker = function(params){this.name = params['name'];
                                       this.tags = params['tags'];
                                       this.latitude = params['latitude'];
                                       this.longitude = params['longitude'];}
+
 function initMap() {
+  // make AJAX call, get list of markers
+  $.ajax({
+      method: 'get',
+      url: '/',
+      contentType: "application/json; charset=utf-8",
+      dataType: "json"
+    })
+      .done(function(response){
+        console.log(response);
+      })
+  // put markers in a format that can be placed on map, like on line 33
+
   var styles = [{"featureType":"poi.school","elementType":"labels.text","stylers":[{"visibility":"off"}]},{"featureType":"poi.business","elementType":"labels.icon","stylers":[{"visibility":"off"}]},{"featureType":"poi.medical","elementType":"labels","stylers":[{"visibility":"off"}]},{"featureType":"transit.station.bus","stylers":[{"visibility":"off"}]},{"featureType":"poi.government","stylers":[{ "visibility":"off"}]},{"featureType":"transit.station.rail","stylers":[{"visibility":"off"}]},{"featureType":"road","elementType":"labels","stylers":[{"hue":"#00e5ff"},{"color":"#19ABB5"},{"weight":1.0}]},{"featureType":"poi.sports_complex","elementType":"labels.text","stylers":[{"visibility":"off"}]}]
   var mapDiv = document.getElementById('map');
 
