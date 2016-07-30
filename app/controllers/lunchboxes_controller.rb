@@ -1,17 +1,17 @@
 class LunchboxesController < ApplicationController
+   skip_before_action :verify_authenticity_token
+
   def index
     @markers = Marker.all
-    return @markers.to_json
   end
 
   def create
     marker = Marker.new(
       name: params[:name],
       description: params[:description],
-      tags: params[:tags],
+      tags: params[:tags[0]],
       latitude: params[:latitude],
-      longitude: params[:longitude],
-      infowindow: params[:infowindow]
+      longitude: params[:longitude]
       )
     if marker.save
       status 200
