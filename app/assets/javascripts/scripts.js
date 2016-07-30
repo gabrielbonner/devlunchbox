@@ -6,19 +6,6 @@ var Marker = function(params){this.name = params['name'];
                                       this.longitude = params['longitude'];}
 
 function initMap() {
-  // make AJAX call, get list of markers
-  $.ajax({
-      method: 'get',
-      url: '/',
-      contentType: "application/json; charset=utf-8",
-      dataType: "json"
-    })
-      .done(function(response){
-        console.log(response);
-      })
-  // put markers in a format that can be placed on map, like on line 33
-
-  var styles = [{"featureType":"poi.school","elementType":"labels.text","stylers":[{"visibility":"off"}]},{"featureType":"poi.business","elementType":"labels.icon","stylers":[{"visibility":"off"}]},{"featureType":"poi.medical","elementType":"labels","stylers":[{"visibility":"off"}]},{"featureType":"transit.station.bus","stylers":[{"visibility":"off"}]},{"featureType":"poi.government","stylers":[{ "visibility":"off"}]},{"featureType":"transit.station.rail","stylers":[{"visibility":"off"}]},{"featureType":"road","elementType":"labels","stylers":[{"hue":"#00e5ff"},{"color":"#19ABB5"},{"weight":1.0}]},{"featureType":"poi.sports_complex","elementType":"labels.text","stylers":[{"visibility":"off"}]}]
   var mapDiv = document.getElementById('map');
 
   // create map on page
@@ -38,17 +25,30 @@ function initMap() {
     title: 'DBC'
   });
 
-  // add markers from database
-  var test_marker = ['Miguel\'s', 32.716537, -117.158398]
-  var db_markers = [test_marker]
-  for (i=0; i<db_markers.length; i++) {
-    marker = new google.maps.Marker({
-      position: {lat: db_markers[i][1], lng: db_markers[i][2]},
-      map: map
-    });
-  }
+  // set custom map style
+  var styles = [{"featureType":"poi.school","elementType":"labels.text","stylers":[{"visibility":"off"}]},{"featureType":"poi.business","elementType":"labels.icon","stylers":[{"visibility":"off"}]},{"featureType":"poi.medical","elementType":"labels","stylers":[{"visibility":"off"}]},{"featureType":"transit.station.bus","stylers":[{"visibility":"off"}]},{"featureType":"poi.government","stylers":[{ "visibility":"off"}]},{"featureType":"transit.station.rail","stylers":[{"visibility":"off"}]},{"featureType":"road","elementType":"labels","stylers":[{"hue":"#00e5ff"},{"color":"#19ABB5"},{"weight":1.0}]},{"featureType":"poi.sports_complex","elementType":"labels.text","stylers":[{"visibility":"off"}]}]
 
   map.setOptions({styles: styles});
+
+  // make AJAX call, get list of markers
+  $.ajax({
+      method: 'get',
+      url: '/getmarkers',
+      dataType: "json"
+    })
+      .done(function(response){
+        var db_markers, i
+        db_markers = response;
+        for (i=0; i<db_markers.length; i++) {
+          marker = new google.maps.Marker({
+            position: {lat: Number(db_markers[i].latitude), lng: Number(db_markers[i].longitude)},
+            map: map
+          });
+        }
+      })
+      .fail(function(){
+        console.log('AJAX request to get markers to populate map has failed');
+      })
 
   // displaying form to capture marker info from user
   google.maps.event.addListener(map, 'rightclick', function( event ){
@@ -64,10 +64,6 @@ function initMap() {
       var name = $(this).closest('form').find('input[name=name]').val();
       var description = $(this).closest('form').find('input[name=description]').val();
       var tags = $(this).closest('form').find('input[name=tags]').val().split(', ');
-      // var infowindow = new google.maps.InfoWindow({"<h3>"+name+"</h3>" +
-      //                                              "<p>Description: "+description+"</p>" +
-      //                                              "<p>Tags: "+tags+"</p>"
-      //                                             });
       lunchbox_marker = new Marker({name: name,
                                           description: description,
                                           tags: tags,
@@ -76,7 +72,7 @@ function initMap() {
       console.log(lunchbox_marker)  // it's aliiiiiive!
 
       $.ajax({
-        method: 'post',
+        method: 'POST',
         dataType: 'json',
         url: '/',
         data: lunchbox_marker
