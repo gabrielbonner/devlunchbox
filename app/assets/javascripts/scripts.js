@@ -50,7 +50,7 @@ function initMap() {
         console.log('AJAX request to get markers to populate map has failed');
       })
 
-  // displaying form to capture marker info from user
+  // display form to capture marker info from user
   google.maps.event.addListener(map, 'rightclick', function( event ){
     new google.maps.Marker({position: {lat: event.latLng.lat(), lng: event.latLng.lng()}, map: map});
     var latitude = event.latLng.lat();
@@ -58,12 +58,12 @@ function initMap() {
     $('#instructions').hide();
     $('#add-new-lunchbox-div').show();
 
-    // create new marker and send to server to persist data
+    // create new marker
     $('#add-new-lunchbox-div').on('click', '#add-lunchbox-btn', function(event){
       event.preventDefault();
       var name = $(this).closest('form').find('input[name=name]').val();
       var description = $(this).closest('form').find('input[name=description]').val();
-      var tags = $(this).closest('form').find('input[name=tags]').val().split(', ');
+      var tags = $(this).closest('form').find('input[name=tags]').val();
       lunchbox_marker = new Marker({name: name,
                                           description: description,
                                           tags: tags,
@@ -71,6 +71,7 @@ function initMap() {
                                           longitude: longitude})
       console.log(lunchbox_marker)  // it's aliiiiiive!
 
+      // send to server to be persisted
       $.ajax({
         method: 'POST',
         dataType: 'json',
@@ -83,10 +84,6 @@ function initMap() {
         .fail(function(response){
           console.log('Server\'s response was ===> ' + response)
         });
-
-      // TODO:
-      // reload page
-      // on page reload, all of the markers in the database are loaded in the map
 
       // pressing cancel button reloads the page
       $('#add-new-lunchbox-div').on('click', '#cancel-add-lunchbox-btn', function(event){

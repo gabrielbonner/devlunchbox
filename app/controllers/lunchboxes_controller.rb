@@ -6,12 +6,14 @@ class LunchboxesController < ApplicationController
   end
 
   def create
+    puts "These are the params: #{params.inspect}"
+    puts params[:tags]
+
     marker = Marker.new(
-      name: params[:name],
-      description: params[:description],
-      tags: params[:tags[0]],
-      latitude: params[:latitude],
-      longitude: params[:longitude]
+      name: params['name'],
+      description: params['description'],
+      latitude: params['latitude'],
+      longitude: params['longitude']
       )
     if marker.save
       status 200
