@@ -11,7 +11,7 @@ function initMap() {
   // create map on page
   var map = new google.maps.Map(mapDiv, {
     center: {lat: 32.7154026, lng: -117.158000},
-    zoom: 17,
+    zoom: 18,
     // HYBRID has satellite view with street names, can also be ROADMAP, etc...
     mapTypeId:google.maps.MapTypeId.HYBRID
   });
