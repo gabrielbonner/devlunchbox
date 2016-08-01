@@ -37,18 +37,30 @@ function initMap() {
       dataType: "json"
     })
       .done(function(response){
+        var infowindow = new google.maps.InfoWindow;
         var db_markers, i
         db_markers = response;
+
+        // add markers to map
         for (i=0; i<db_markers.length; i++) {
           marker = new google.maps.Marker({
             position: {lat: Number(db_markers[i].latitude), lng: Number(db_markers[i].longitude)},
             map: map
           });
+
+          // add infowindows to markers
+          google.maps.event.addListener(marker, 'click', (function(marker, i) {
+            return function(){
+              infowindow.setContent('<h2 class="infowindow-title">' + db_markers[i].name + '</h2><br>' +
+                                                  'Description: ' + db_markers[i].description + '<br>' +
+                                                  'Tags: ' + db_markers[i].tagwords
+                );
+              infowindow.open(map, marker);
+            }
+          })(marker, i));
         }
-      })
-      .fail(function(){
-        console.log('AJAX request to get markers to populate map has failed');
-      })
+      });
+
 
   // display form to capture marker info from user
   google.maps.event.addListener(map, 'rightclick', function( event ){
