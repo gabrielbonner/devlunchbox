@@ -13,7 +13,8 @@ class LunchboxesController < ApplicationController
       name: params['name'],
       description: params['description'],
       latitude: params['latitude'],
-      longitude: params['longitude']
+      longitude: params['longitude'],
+      tagwords: params['tags']
       )
     if marker.save
       status 200
