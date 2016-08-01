@@ -1,5 +1,5 @@
 class LunchboxesController < ApplicationController
-   skip_before_action :verify_authenticity_token
+   skip_before_action :verify_authenticity_token, only: [:create]
 
   def index
     @markers = Marker.all
@@ -7,8 +7,6 @@ class LunchboxesController < ApplicationController
 
   def create
     puts "These are the params: #{params.inspect}"
-    puts params[:tags]
-
     marker = Marker.new(
       name: params['name'],
       description: params['description'],
@@ -17,11 +15,9 @@ class LunchboxesController < ApplicationController
       tagwords: params['tags']
       )
     if marker.save
-      status 200
-      return marker.to_json
+        render json: [{ :confirmation => "Your lunchbox marker was saved to the database." }], :status => 200
     else
-      status 422
-      return "Your marker instance could not be saved, please try again."
+        render :json => [{ :error => "An error was encountered while attempting to save your marker. Please try again." }], :status => 304
     end
   end
 
