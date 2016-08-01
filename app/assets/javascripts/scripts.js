@@ -11,7 +11,7 @@ function initMap() {
   // create map on page
   var map = new google.maps.Map(mapDiv, {
     center: {lat: 32.7154026, lng: -117.158000},
-    zoom: 18,
+    zoom: 17,
     // HYBRID has satellite view with street names, can also be ROADMAP, etc...
     mapTypeId:google.maps.MapTypeId.HYBRID
   });
@@ -37,20 +37,32 @@ function initMap() {
       dataType: "json"
     })
       .done(function(response){
+        var infowindow = new google.maps.InfoWindow;
         var db_markers, i
         db_markers = response;
+
+        // add markers to map
         for (i=0; i<db_markers.length; i++) {
           marker = new google.maps.Marker({
             position: {lat: Number(db_markers[i].latitude), lng: Number(db_markers[i].longitude)},
             map: map
           });
-        }
-      })
-      .fail(function(){
-        console.log('AJAX request to get markers to populate map has failed');
-      })
 
-  // displaying form to capture marker info from user
+          // add infowindows to markers
+          google.maps.event.addListener(marker, 'click', (function(marker, i) {
+            return function(){
+              infowindow.setContent('<h2 class="infowindow-title">' + db_markers[i].name + '</h2><br>' +
+                                                  'Description: ' + db_markers[i].description + '<br>' +
+                                                  'Tags: ' + db_markers[i].tagwords
+                );
+              infowindow.open(map, marker);
+            }
+          })(marker, i));
+        }
+      });
+
+
+  // display form to capture marker info from user
   google.maps.event.addListener(map, 'rightclick', function( event ){
     new google.maps.Marker({position: {lat: event.latLng.lat(), lng: event.latLng.lng()}, map: map});
     var latitude = event.latLng.lat();
@@ -58,12 +70,12 @@ function initMap() {
     $('#instructions').hide();
     $('#add-new-lunchbox-div').show();
 
-    // create new marker and send to server to persist data
+    // create new marker
     $('#add-new-lunchbox-div').on('click', '#add-lunchbox-btn', function(event){
       event.preventDefault();
       var name = $(this).closest('form').find('input[name=name]').val();
       var description = $(this).closest('form').find('input[name=description]').val();
-      var tags = $(this).closest('form').find('input[name=tags]').val().split(', ');
+      var tags = $(this).closest('form').find('input[name=tags]').val();
       lunchbox_marker = new Marker({name: name,
                                           description: description,
                                           tags: tags,
@@ -71,6 +83,7 @@ function initMap() {
                                           longitude: longitude})
       console.log(lunchbox_marker)  // it's aliiiiiive!
 
+      // send to server to be persisted
       $.ajax({
         method: 'POST',
         dataType: 'json',
@@ -83,10 +96,6 @@ function initMap() {
         .fail(function(response){
           console.log('Server\'s response was ===> ' + response)
         });
-
-      // TODO:
-      // reload page
-      // on page reload, all of the markers in the database are loaded in the map
 
       // pressing cancel button reloads the page
       $('#add-new-lunchbox-div').on('click', '#cancel-add-lunchbox-btn', function(event){

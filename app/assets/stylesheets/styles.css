@@ -87,3 +87,7 @@ a {
 body {
   min-height:100%
 }
+
+.infowindow-title {
+  margin: 0;
+}
