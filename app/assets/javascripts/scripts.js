@@ -11,7 +11,7 @@ function initMap() {
   // create map on page
   var map = new google.maps.Map(mapDiv, {
     center: {lat: 32.7154026, lng: -117.158000},
-    zoom: 17,
+    zoom: 18,
     // HYBRID has satellite view with street names, can also be ROADMAP, etc...
     mapTypeId:google.maps.MapTypeId.HYBRID
   });
@@ -81,7 +81,6 @@ function initMap() {
                                           tags: tags,
                                           latitude: latitude,
                                           longitude: longitude})
-      console.log(lunchbox_marker)  // it's aliiiiiive!
 
       // send to server to be persisted
       $.ajax({
@@ -90,17 +89,19 @@ function initMap() {
         url: '/',
         data: lunchbox_marker
       })
-        .done(function(response){
-          alert("Your marker was saved to the map");
+        .done(function(){
+          location.reload(true);
         })
-        .fail(function(response){
-          console.log('Server\'s response was ===> ' + response)
+        .fail(function(xhr, ajaxOptions, thrownError) {
+           console.log(xhr.status);
+           console.log(xhr.responseText);
+           console.log(thrownError);
         });
 
       // pressing cancel button reloads the page
       $('#add-new-lunchbox-div').on('click', '#cancel-add-lunchbox-btn', function(event){
         event.preventDefault();
-        location.reload(true)
+        location.reload(true);
       });
     });
   });
